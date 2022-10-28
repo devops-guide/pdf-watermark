@@ -13,14 +13,13 @@ const createWindow = () => {
     win.webContents.openDevTools()
     win.loadFile('index.html')
 }
+const filters = [
+    { name: 'PDF', extensions: ['pdf'] },
+];
 
 let choiceFilePath;
 async function choiceFile() {
-    const { canceled, filePaths } = await dialog.showOpenDialog({
-        filters: [
-            { name: 'PDF', extensions: ['pdf'] },
-        ]
-    });
+    const { canceled, filePaths } = await dialog.showOpenDialog({ filters });
     if (canceled)
         return
     choiceFilePath = filePaths[0];
@@ -28,15 +27,9 @@ async function choiceFile() {
 }
 
 async function saveFile(event, text) {
-    const { canceled, filePath } = await dialog.showSaveDialog({
-        filters: [
-            { name: 'PDF', extensions: ['pdf'] },
-        ]
-    })
+    const { canceled, filePath } = await dialog.showSaveDialog({ filters })
     if (canceled)
         return
-
-    console.log(text);
     addWatermark(choiceFilePath, filePath, { text });
     return filePath;
 }
