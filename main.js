@@ -1,46 +1,54 @@
-import fs from 'fs';
-import fontkit from '@pdf-lib/fontkit';
-import { PDFDocument, rgb, degrees } from 'pdf-lib';
+const fs = require('fs');
+const fontkit = require('@pdf-lib/fontkit');
+const { PDFDocument, rgb, degrees } = require('pdf-lib');
 
-const uint8Array = fs.readFileSync('./input.pdf')
 const fontBytes = fs.readFileSync('./fonts/Microsoft Yahei.ttf')
-const WATERMARK_TEXT = '仅供XXX内部使用';
 
-const textOptions = {
+const defaultTextOptions = {
     marginBottom: 50,
     marginRight: 50,
     textSize: 30,
     opacity: 0.4,
     color: rgb(228/255.0, 228/255.0, 228/255.0),
+    text: '仅限XXX内部使用',
 };
 
-const pdfDoc = await PDFDocument.load(uint8Array);
-pdfDoc.registerFontkit(fontkit);
+async function addWatermark (inputFilePath, outputFilePath, textOptions) {
+    let options = {...defaultTextOptions, ...textOptions};
 
-const chineseFonts = await pdfDoc.embedFont(fontBytes);
-const pages = pdfDoc.getPages();
+    const uint8Array = fs.readFileSync(inputFilePath);
+    const pdfDoc = await PDFDocument.load(uint8Array);
+    pdfDoc.registerFontkit(fontkit);
 
-const textWidth = chineseFonts.widthOfTextAtSize(WATERMARK_TEXT, textOptions.textSize) + textOptions.marginRight;
-const textHeight = chineseFonts.heightAtSize(textOptions.textSize) + textOptions.marginBottom;
+    const chineseFonts = await pdfDoc.embedFont(fontBytes);
+    const pages = pdfDoc.getPages();
+
+    const textWidth = chineseFonts.widthOfTextAtSize(options.text, options.textSize) + options.marginRight;
+    const textHeight = chineseFonts.heightAtSize(options.textSize) + options.marginBottom;
 
 
-pages.forEach(onePage => {
-    const { width, height } = onePage.getSize();
-    
-    for (let j = 0; j < (width / textWidth); j++) {
-        for (let i = 0; i < (height / textHeight); i++) {
-            onePage.drawText(WATERMARK_TEXT, {
-                x: j * textWidth,
-                y: height - i * textHeight,
-                size: textOptions.textSize,
-                font: chineseFonts,
-                opacity: textOptions.opacity,
-                color: textOptions.color,
-                rotate: degrees(-45),
-            })
+    pages.forEach(onePage => {
+        const { width, height } = onePage.getSize();
+        
+        for (let j = 0; j < (width / textWidth); j++) {
+            for (let i = 0; i < (height / textHeight); i++) {
+                onePage.drawText(options.text, {
+                    x: j * textWidth,
+                    y: height - i * textHeight,
+                    size: options.textSize,
+                    font: chineseFonts,
+                    opacity: options.opacity,
+                    color: options.color,
+                    rotate: degrees(-45),
+                })
+            }
         }
-    }
-})
+    })
 
-const pdfBytes = await pdfDoc.save();
-fs.writeFileSync('./output.pdf', pdfBytes);
+    const pdfBytes = await pdfDoc.save();
+    fs.writeFileSync(outputFilePath, pdfBytes);
+}
+
+module.exports = {
+    addWatermark
+}
