@@ -7,7 +7,7 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            sandbox: false,
+            sandbox: false, // 为了能在 preload 中引用vue，这个方法不好
             preload: path.join(__dirname, './web/preload.js'),
         },
     })
