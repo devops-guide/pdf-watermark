@@ -17,7 +17,7 @@
         <li><label>水印文字：<input type="text" id="watermarkText" v-model="textOptions.text"></label></li>
         <li>
             <button @click="choiceFile">选择文件</button>
-            <button @click="saveFile">保存文件</button>
+            <button @click="saveFile" :disabled="!textOptions.text || !inputFilePath">保存文件</button>
         </li>
         </ul>
     </div>
