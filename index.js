@@ -10,7 +10,7 @@ const createWindow = () => {
             preload: path.join(__dirname, './web/preload.js'),
         },
     })
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
     win.loadFile('index.html')
 }
 const filters = [

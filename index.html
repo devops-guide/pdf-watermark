@@ -2,26 +2,57 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <!-- 因为使用 vue 所以把这里 注释掉，还没有完全搞清楚具体原因 -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"/>
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" /> -->
     <title>PDF Watermark</title>
-    <link rel="stylesheet" href="./web/styles/styles.css">
+    <link rel="stylesheet" href="./web/styles/bootstrap.min.css">
   </head>
-  <body>
+  <body class="container">
     <div id="app">
-        <ul>
-        <li>{{ inputFilePath }}</li>
-        <li>{{ textOptions.text }}</li>
-        <li><label>水印文字：<input type="text" id="watermarkText" v-model="textOptions.text"></label></li>
-        <li>角度：<input type="number" v-model="textOptions.rotate" size="2" ><input type="range" min="-180" max="180" v-model="textOptions.rotate"> {{ textOptions.rotate }}</li>
-        <li>透明度：<input type="range" min="0" step="0.1" max="1" v-model="textOptions.opacity"> {{ textOptions.opacity }}</li>
-        <li>
-            <button @click="choiceFile">选择文件</button>
-            <button @click="saveFile" :disabled="!textOptions.text || !inputFilePath">保存文件</button>
-        </li>
-        </ul>
+        <div class="row justify-content-md-center">
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">选择文件：</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <div class="col-sm-9">
+                            <input class="form-control" readonly :value="inputFilePath" :class="inputFilePath ? '': 'is-invalid'">
+                        </div>
+                        <button @click="choiceFile" class="btn btn-primary col-sm-3">选择文件</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">水印文字：</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" placeholder="仅供XXX内部使用" v-model="textOptions.text"  :class="textOptions.text ? '': 'is-invalid'">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">角度：</label>
+                <div class="col-sm-7">
+                    <input class="form-range" type="range" min="-180" max="180" v-model="textOptions.rotate">
+                </div>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" v-model="textOptions.rotate">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">透明度 ：</label>
+                <div class="col-sm-7">
+                    <input class="form-range" type="range" min="0" step="0.1" max="1" v-model="textOptions.opacity">
+                </div>
+                <div class="col-sm-2">
+                    {{ textOptions.opacity }}
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <button @click="saveFile" :disabled="!textOptions.text || !inputFilePath || loading" class="btn btn-primary mb-3">保存文件</button>
+            </div>
+        </div>
     </div>
     <script src="./web/vue.global.js"></script>
     <script src="./web/renderer.js"></script>
