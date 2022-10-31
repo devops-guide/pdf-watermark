@@ -1,8 +1,9 @@
 const fs = require('fs');
+const path = require('path')
 const fontkit = require('@pdf-lib/fontkit');
 const { PDFDocument, rgb, degrees } = require('pdf-lib');
 
-const fontBytes = fs.readFileSync('./fonts/Microsoft Yahei.ttf')
+const fontBytes = fs.readFileSync(path.join(__dirname, './fonts/Microsoft Yahei.ttf'));
 
 const defaultTextOptions = {
     marginBottom: 50,

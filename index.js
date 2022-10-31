@@ -1,5 +1,5 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const { addWatermark } = require('./main');
 
 const createWindow = () => {
