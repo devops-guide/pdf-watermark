@@ -1,4 +1,5 @@
 const path = require('path')
+const { env } = require('node:process');
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const { addWatermark } = require('./main');
 
@@ -10,7 +11,9 @@ const createWindow = () => {
             preload: path.join(__dirname, './web/preload.js'),
         },
     })
-    // win.webContents.openDevTools()
+    if (env.__debug) {
+        win.webContents.openDevTools()
+    }
     win.loadFile('index.html')
 }
 const filters = [
@@ -43,4 +46,10 @@ app.whenReady().then(() => {
     ipcMain.handle('dialog:saveFile', saveFile)
     ipcMain.handle('dropFile', dropFile)
     createWindow()
+})
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 })
