@@ -6,7 +6,8 @@ const vueApp = createApp({
           inputFilePath: '',
           textOptions: {
               text: '',
-              opacity: 0.4
+              opacity: 0.4,
+              rotate: -45,
           }
       }
   },

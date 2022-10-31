@@ -10,6 +10,7 @@ const defaultTextOptions = {
     textSize: 30,
     opacity: 0.4,
     color: rgb(228/255.0, 228/255.0, 228/255.0),
+    rotate: -45,
     text: '仅限XXX内部使用',
 };
 
@@ -39,7 +40,7 @@ async function addWatermark (inputFilePath, outputFilePath, textOptions) {
                     font: chineseFonts,
                     opacity: Number(options.opacity),
                     color: options.color,
-                    rotate: degrees(-45),
+                    rotate: degrees(Number(options.rotate)),
                 })
             }
         }
