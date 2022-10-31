@@ -3,24 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'"
-    />
+    <!-- 因为使用 vue 所以把这里 注释掉，还没有完全搞清楚具体原因 -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"/>
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" /> -->
     <title>PDF Watermark</title>
     <link rel="stylesheet" href="./web/styles/styles.css">
   </head>
   <body>
-    <div id="app">{{ message }}</div>
-    <ul></ul>
-    <li></li>
-    <li><label>水印文字：<input type="text" id="watermarkText"></label></li>
-    <li>
-        <button id="choice-file">选择文件</button>
-        <button id="save-file">保存文件</button>
-    </li>
+    <div id="app">
+        <ul>
+        <li>{{ inputFilePath }}</li>
+        <li>{{ textOptions.text }}</li>
+        <li><label>水印文字：<input type="text" id="watermarkText" v-model="textOptions.text"></label></li>
+        <li>
+            <button @click="choiceFile">选择文件</button>
+            <button @click="saveFile">保存文件</button>
+        </li>
+        </ul>
+    </div>
+    <script src="./web/vue.global.js"></script>
     <script src="./web/renderer.js"></script>
   </body>
 </html>

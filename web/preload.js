@@ -1,5 +1,4 @@
 const { contextBridge, ipcRenderer } = require('electron')
-const { createApp } = require('vue')
 
 contextBridge.exposeInMainWorld('electronAPI', {
     choiceFile: () => ipcRenderer.invoke('dialog:choiceFile'),
@@ -18,13 +17,3 @@ document.addEventListener('dragover', (e) => {
     e.preventDefault();
     e.stopPropagation();
 });
-
-window.addEventListener('DOMContentLoaded', () => {
-    createApp({
-        data() {
-          return {
-            message: 'Hello Vue!'
-          }
-        }
-    }).mount('#app')
-  })

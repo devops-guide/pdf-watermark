@@ -1,13 +1,23 @@
-const choiceBtn = document.getElementById('choice-file');
+const { createApp } = Vue
 
-choiceBtn.addEventListener('click', async () => {
-  const filePath = await window.electronAPI.choiceFile()
-  console.log(filePath);
+const vueApp = createApp({
+  data() {
+      return {
+          inputFilePath: '',
+          textOptions: {
+              text: '',
+          }
+      }
+  },
+  methods: {
+      async choiceFile () {
+        const filePath = await window.electronAPI.choiceFile()
+        this.inputFilePath = filePath;
+      },
+      async saveFile () {
+        window.electronAPI.saveFile(this.textOptions.text);
+      }
+  }
 });
 
-const saveBtn = document.getElementById('save-file');
-const watermarkTextInput = document.getElementById('watermarkText');
-
-saveBtn.addEventListener('click', async () => {
-  await window.electronAPI.saveFile(watermarkTextInput.value);
-})
+vueApp.mount('#app');
