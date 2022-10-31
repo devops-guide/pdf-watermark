@@ -13,10 +13,14 @@
     <link rel="stylesheet" href="./web/styles/styles.css">
   </head>
   <body>
-    <h1>Hello from Electron renderer!</h1>
-    <label>水印文字：<input type="text" id="watermarkText"></label>
-    <button id="choice-file">选择文件</button>
-    <button id="save-file">保存文件</button>
+    <div id="app">{{ message }}</div>
+    <ul></ul>
+    <li></li>
+    <li><label>水印文字：<input type="text" id="watermarkText"></label></li>
+    <li>
+        <button id="choice-file">选择文件</button>
+        <button id="save-file">保存文件</button>
+    </li>
     <script src="./web/renderer.js"></script>
   </body>
 </html>

@@ -1,23 +1,30 @@
 const { contextBridge, ipcRenderer } = require('electron')
+const { createApp } = require('vue')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  choiceFile: () => ipcRenderer.invoke('dialog:choiceFile'),
-  saveFile: (text) => ipcRenderer.invoke('dialog:saveFile', text)
+    choiceFile: () => ipcRenderer.invoke('dialog:choiceFile'),
+    saveFile: (text) => ipcRenderer.invoke('dialog:saveFile', text)
 })
 
-// document.addEventListener('drop', (e) => {
-//   e.preventDefault();
-//   e.stopPropagation();
+document.addEventListener('drop', async(e) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-//   for (const f of e.dataTransfer.files) {
-//     console.log('File(s) you dragged here: ', f.path)
-//   }
-// });
+    const [file] = e.dataTransfer.files;
+    await ipcRenderer.invoke('dropFile', file.path);
+});
 
-// document.addEventListener('dragover', (e) => {
-//   e.preventDefault();
-//   e.stopPropagation();
-// });
+document.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+});
 
-
-
+window.addEventListener('DOMContentLoaded', () => {
+    createApp({
+        data() {
+          return {
+            message: 'Hello Vue!'
+          }
+        }
+    }).mount('#app')
+  })

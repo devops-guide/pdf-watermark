@@ -7,6 +7,7 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
+            sandbox: false,
             preload: path.join(__dirname, './web/preload.js'),
         },
     })
@@ -23,7 +24,11 @@ async function choiceFile() {
     if (canceled)
         return
     choiceFilePath = filePaths[0];
-    return filePaths[0]
+    return choiceFilePath;
+}
+
+async function dropFile(event, filePath) {
+    choiceFilePath = filePath;
 }
 
 async function saveFile(event, text) {
@@ -37,5 +42,6 @@ async function saveFile(event, text) {
 app.whenReady().then(() => {
     ipcMain.handle('dialog:choiceFile', choiceFile)
     ipcMain.handle('dialog:saveFile', saveFile)
+    ipcMain.handle('dropFile', dropFile)
     createWindow()
 })

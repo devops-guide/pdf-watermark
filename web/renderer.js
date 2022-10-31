@@ -1,6 +1,6 @@
 const choiceBtn = document.getElementById('choice-file');
 
-choiceBtn.addEventListener('click', async (event) => {
+choiceBtn.addEventListener('click', async () => {
   const filePath = await window.electronAPI.choiceFile()
   console.log(filePath);
 });
