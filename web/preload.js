@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
     choiceFile: () => ipcRenderer.invoke('dialog:choiceFile'),
-    saveFile: (text) => ipcRenderer.invoke('dialog:saveFile', text)
+    saveFile: (textOptions) => ipcRenderer.invoke('dialog:saveFile', textOptions)
 })
 
 document.addEventListener('drop', async(e) => {

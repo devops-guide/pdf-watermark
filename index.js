@@ -30,11 +30,11 @@ async function dropFile(event, filePath) {
     choiceFilePath = filePath;
 }
 
-async function saveFile(event, text) {
+async function saveFile(event, textOptions) {
     const { canceled, filePath } = await dialog.showSaveDialog({ filters })
     if (canceled)
         return
-    addWatermark(choiceFilePath, filePath, { text });
+    addWatermark(choiceFilePath, filePath, textOptions);
     return filePath;
 }
 

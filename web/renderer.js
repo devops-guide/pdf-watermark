@@ -6,6 +6,7 @@ const vueApp = createApp({
           inputFilePath: '',
           textOptions: {
               text: '',
+              opacity: 0.4
           }
       }
   },
@@ -15,7 +16,7 @@ const vueApp = createApp({
         this.inputFilePath = filePath;
       },
       async saveFile () {
-        window.electronAPI.saveFile(this.textOptions.text);
+        window.electronAPI.saveFile({ ... this.textOptions});
       }
   }
 });

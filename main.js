@@ -37,7 +37,7 @@ async function addWatermark (inputFilePath, outputFilePath, textOptions) {
                     y: height - i * textHeight,
                     size: options.textSize,
                     font: chineseFonts,
-                    opacity: options.opacity,
+                    opacity: Number(options.opacity),
                     color: options.color,
                     rotate: degrees(-45),
                 })
