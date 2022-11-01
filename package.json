@@ -7,6 +7,7 @@
     "start": "debug=true electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "publish": "electron-forge publish",
     "lint": "eslint --fix --ext .js ./"
   },
   "keywords": [],
@@ -30,7 +31,9 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "icons/logo.ico"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
