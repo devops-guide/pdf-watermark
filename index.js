@@ -26,7 +26,7 @@ let choiceFilePath;
 async function choiceFile() {
   const { canceled, filePaths } = await dialog.showOpenDialog({ filters });
   if (canceled) return;
-  choiceFilePath = filePaths[0];
+  ([choiceFilePath] = filePaths);
   return choiceFilePath;
 }
 
