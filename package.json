@@ -8,7 +8,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --fix --ext .js ./"
+    "lint": "eslint --fix --ext .js ./",
+    "test": "node ./test/testMain.js"
   },
   "keywords": [],
   "author": "",
