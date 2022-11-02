@@ -15,6 +15,22 @@ const defaultTextOptions = {
   text: '仅限XXX内部使用',
 };
 
+function tiled(width, textWidth, height, textHeight, onePage, options, chineseFonts) {
+  for (let j = 0; j < (width / textWidth); j++) {
+    for (let i = 0; i < (height / textHeight); i++) {
+      onePage.drawText(options.text, {
+        x: j * textWidth,
+        y: height - i * textHeight,
+        size: options.textSize,
+        font: chineseFonts,
+        opacity: Number(options.opacity),
+        color: options.color,
+        rotate: degrees(Number(options.rotate)),
+      });
+    }
+  }
+}
+
 async function addWatermark(inputFilePath, outputFilePath, textOptions) {
   const options = { ...defaultTextOptions, ...textOptions };
 
@@ -31,18 +47,21 @@ async function addWatermark(inputFilePath, outputFilePath, textOptions) {
   pages.forEach((onePage) => {
     const { width, height } = onePage.getSize();
 
-    for (let j = 0; j < (width / textWidth); j++) {
-      for (let i = 0; i < (height / textHeight); i++) {
-        onePage.drawText(options.text, {
-          x: j * textWidth,
-          y: height - i * textHeight,
-          size: options.textSize,
-          font: chineseFonts,
-          opacity: Number(options.opacity),
-          color: options.color,
-          rotate: degrees(Number(options.rotate)),
-        });
-      }
+    if (textOptions.style === 'tiled') {
+      tiled(width, textWidth, height, textHeight, onePage, options, chineseFonts);
+    }
+
+    if (textOptions.style === 'centered') {
+      // const a = Math.sqrt(2 * textWidth) / 2;
+      onePage.drawText(options.text, {
+        x: (width - textWidth) / 2,
+        y: (height - textHeight) / 2,
+        size: options.textSize,
+        font: chineseFonts,
+        opacity: Number(options.opacity),
+        color: options.color,
+        rotate: degrees(Number(options.rotate)),
+      });
     }
   });
 
