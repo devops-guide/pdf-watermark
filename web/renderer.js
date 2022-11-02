@@ -8,10 +8,23 @@ const vueApp = createApp({
       loading: false,
       textOptions: {
         text: '',
+        textSize: 30,
         opacity: 0.4,
         rotate: -45,
+        style: 'tiled',
       },
     };
+  },
+  watch: {
+    'textOptions.style': function (newVal) {
+      if (newVal === 'centered') {
+        this.textOptions.rotate = 0;
+        this.textOptions.textSize = 150;
+      } else {
+        this.textOptions.rotate = -45;
+        this.textOptions.textSize = 30;
+      }
+    },
   },
   methods: {
     async choiceFile() {

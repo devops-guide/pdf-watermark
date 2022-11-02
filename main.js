@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { writeFile } = require('node:fs/promises');
 const fontkit = require('@pdf-lib/fontkit');
 const { PDFDocument, rgb, degrees } = require('pdf-lib');
 
@@ -33,6 +34,7 @@ function tiled(width, textWidth, height, textHeight, onePage, options, chineseFo
 
 async function addWatermark(inputFilePath, outputFilePath, textOptions) {
   const options = { ...defaultTextOptions, ...textOptions };
+  options.textSize = Number(options.textSize);
 
   const uint8Array = fs.readFileSync(inputFilePath);
   const pdfDoc = await PDFDocument.load(uint8Array);
@@ -66,7 +68,7 @@ async function addWatermark(inputFilePath, outputFilePath, textOptions) {
   });
 
   const pdfBytes = await pdfDoc.save();
-  fs.writeFileSync(outputFilePath, pdfBytes);
+  await writeFile(outputFilePath, pdfBytes);
 }
 
 module.exports = {

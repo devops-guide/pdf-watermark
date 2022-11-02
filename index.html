@@ -31,6 +31,28 @@
                 </div>
             </div>
             <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">水印样式：</label>
+                <div class="col-sm-9">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" v-model="textOptions.style" id="tiled" value="tiled" checked>
+                        <label class="form-check-label" for="tiled">平铺</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" v-model="textOptions.style" id="centered" value="centered">
+                        <label class="form-check-label" for="centered">居中</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">字体大小：</label>
+                <div class="col-sm-7">
+                    <input class="form-range" type="range" min="30" max="300" v-model="textOptions.textSize">
+                </div>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" v-model="textOptions.textSize">
+                </div>
+            </div>
+            <div class="mb-3 row" v-show="textOptions.style === 'tiled'">
                 <label class="col-sm-3 col-form-label">角度：</label>
                 <div class="col-sm-7">
                     <input class="form-range" type="range" min="-180" max="180" v-model="textOptions.rotate">
