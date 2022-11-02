@@ -1,5 +1,23 @@
 # pdf-watermark
 
-用于给 PDF 添加水印，目前还是出行，待后期使用 Electron 进行包装一下。
+用于给 PDF 添加水印
 
-修改 main.js 中的 `input.pdf` 和 `WATERMARK_TEXT` 即可使用。
+
+
+平铺效果：
+
+![](https://tva1.sinaimg.cn/large/008vxvgGly1h7r7dt67p8j31hf0u00x9.jpg)
+
+
+
+居中效果：
+
+![](https://tva1.sinaimg.cn/large/008vxvgGly1h7r7einzkvj31he0u076e.jpg)
+
+
+
+界面：
+
+![](https://tva1.sinaimg.cn/large/008vxvgGly1h7r7f6zvawj318g0rswgh.jpg)
+
+
