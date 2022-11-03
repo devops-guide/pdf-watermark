@@ -1,7 +1,7 @@
 const path = require('path');
 const { env } = require('node:process');
 const {
-  app, BrowserWindow, ipcMain, dialog,
+  app, BrowserWindow, ipcMain, dialog, shell
 } = require('electron');
 const { addWatermark } = require('./main');
 
@@ -41,10 +41,15 @@ async function saveFile(event, textOptions) {
   return filePath;
 }
 
+async function openFolder(event, fullPath) {
+  shell.showItemInFolder(fullPath);
+}
+
 app.whenReady().then(() => {
   ipcMain.handle('dialog:choiceFile', choiceFile);
   ipcMain.handle('dialog:saveFile', saveFile);
   ipcMain.handle('dropFile', dropFile);
+  ipcMain.handle('openFolder', openFolder);
   createWindow();
 });
 

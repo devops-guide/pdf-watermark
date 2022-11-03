@@ -6,6 +6,7 @@ const vueApp = createApp({
     return {
       inputFilePath: '',
       loading: false,
+      showTip: false,
       textOptions: {
         text: '',
         textSize: 30,
@@ -33,8 +34,13 @@ const vueApp = createApp({
     },
     async saveFile() {
       this.loading = true;
-      await window.electronAPI.saveFile({ ...this.textOptions });
+      const filePath = await window.electronAPI.saveFile({ ...this.textOptions });
       this.loading = false;
+      this.showTip = true;
+      await window.electronAPI.openFolder(filePath);
+      setTimeout(() => {
+        this.showTip = false;
+      }, 3000);
     },
   },
 });
