@@ -21,8 +21,6 @@
                         <img src="./icons/logo.png" class="rounded me-2
                             toast-icon" alt="...">
                         <strong class="me-auto">PW</strong>
-                        <button type="button" class="btn-close"
-                            data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
                     <div class="toast-body">
                         文件已经生成！
@@ -36,7 +34,7 @@
                         <div class="input-group">
                             <div class="col-sm-9">
                                 <input class="form-control" readonly
-                                    :value="inputFilePath" :class="inputFilePath
+                                    :value="textOptions.inputFilePath" :class="textOptions.inputFilePath
                                     ? '': 'is-invalid'">
                             </div>
                             <button @click="choiceFile" class="btn btn-primary
@@ -106,7 +104,7 @@
 
                 <div class="mb-3">
                     <button @click="saveFile" :disabled="!textOptions.text ||
-                        !inputFilePath || loading" class="btn btn-primary mb-3">保存文件</button>
+                        !textOptions.inputFilePath || loading" class="btn btn-primary mb-3">保存文件</button>
                 </div>
             </div>
         </div>

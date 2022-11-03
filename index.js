@@ -1,7 +1,7 @@
 const path = require('path');
 const { env } = require('node:process');
 const {
-  app, BrowserWindow, ipcMain, dialog, shell
+  app, BrowserWindow, ipcMain, dialog, shell,
 } = require('electron');
 const { addWatermark } = require('./main');
 
@@ -22,22 +22,18 @@ const filters = [
   { name: 'PDF', extensions: ['pdf'] },
 ];
 
-let choiceFilePath;
 async function choiceFile() {
   const { canceled, filePaths } = await dialog.showOpenDialog({ filters });
   if (canceled) return;
-  ([choiceFilePath] = filePaths);
+  const [choiceFilePath] = filePaths;
   return choiceFilePath;
 }
 
-async function dropFile(event, filePath) {
-  choiceFilePath = filePath;
-}
-
 async function saveFile(event, textOptions) {
+  const { inputFilePath } = textOptions;
   const { canceled, filePath } = await dialog.showSaveDialog({ filters });
   if (canceled) return;
-  addWatermark(choiceFilePath, filePath, textOptions);
+  addWatermark(inputFilePath, filePath, textOptions);
   return filePath;
 }
 
@@ -48,7 +44,6 @@ async function openFolder(event, fullPath) {
 app.whenReady().then(() => {
   ipcMain.handle('dialog:choiceFile', choiceFile);
   ipcMain.handle('dialog:saveFile', saveFile);
-  ipcMain.handle('dropFile', dropFile);
   ipcMain.handle('openFolder', openFolder);
   createWindow();
 });

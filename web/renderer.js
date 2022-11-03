@@ -4,10 +4,10 @@ const { createApp } = Vue;
 const vueApp = createApp({
   data() {
     return {
-      inputFilePath: '',
       loading: false,
       showTip: false,
       textOptions: {
+        inputFilePath: '',
         text: '',
         textSize: 30,
         opacity: 0.4,
@@ -30,7 +30,7 @@ const vueApp = createApp({
   methods: {
     async choiceFile() {
       const filePath = await window.electronAPI.choiceFile();
-      this.inputFilePath = filePath;
+      this.textOptions.inputFilePath = filePath;
     },
     async saveFile() {
       this.loading = true;
