@@ -27,8 +27,8 @@ jobs:
         uses: thedoctor0/zip-release@main
         with:
           type: zip
-          filename: pdf-watermark${{github.ref_name}}.app.zip
-          path: out/pdf-watermark.app
+          filename: pdf-watermark${{github.ref_name}}.zip
+          path: out
 
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
