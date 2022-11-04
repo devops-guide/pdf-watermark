@@ -34,12 +34,12 @@ jobs:
         uses: actions/upload-artifact@v3.0.0
         with:
           name: macOS-latest
-          path: "out/pdf-watermark${{github.ref_name}}.zip"
+          path: "pdf-watermark${{github.ref_name}}.zip"
 
       - name: release
         uses: softprops/action-gh-release@v0.1.14
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: "out/pdf-watermark${{github.ref_name}}.zip"
+          files: "pdf-watermark${{github.ref_name}}.zip"
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
