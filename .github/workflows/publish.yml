@@ -22,10 +22,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-      - name: zip app
-        uses: montudor/action-zip@v1
+
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
         with:
-          args: zip -qq -r pdf-watermark${{github.ref_name}}.app.zip out/pdf-watermark.app
+          type: zip
+          filename: pdf-watermark${{github.ref_name}}.app.zip
+          path: out/pdf-watermark.app
 
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
