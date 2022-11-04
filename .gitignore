@@ -2,3 +2,4 @@ output.pdf
 node_modules
 .DS_Store
 out
+.idea
