@@ -28,13 +28,14 @@ jobs:
         with:
           type: zip
           filename: pdf-watermark-${{github.ref_name}}.zip
-          path: out/pdf-watermark*
+          path: pdf-watermark*
+          directory: out
 
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
         with:
           name: macOS-latest
-          path: pdf-watermark-${{github.ref_name}}.zip
+          path: out/pdf-watermark-${{github.ref_name}}.zip
 
       - name: release
         uses: softprops/action-gh-release@v0.1.14
