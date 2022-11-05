@@ -1,32 +1,37 @@
 name: Publish Release
 
-on: push
+on:
+  push:
+    tags:
+      - v*
 
 jobs:
-  release:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [macos-latest]
-
+  build-and-deploy:
+    runs-on: macOS-latest
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v3.0.0
 
-      - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v1
+      - name: Install Node.js
+        uses: actions/setup-node@v3.0.0
         with:
-          node-version: 14.17.5
+          node-version: "14.17.5"
 
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build App
+        run: npm run package
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Archive Release
+        run: npm run make
+
+      - name: Release
+        uses: softprops/action-gh-release@v0.1.14
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          # GitHub token, automatically provided to the action
-          # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.github_token }}
-
-          # If the commit is tagged with a version (e.g. "v1.0.0"),
-          # release the app after building
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
-          
+          files: out/make/**/pdf-watermark-*${{github.ref_name}}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
