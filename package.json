@@ -3,6 +3,9 @@
   "version": "1.0.2",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=14.17.5"
+  },
   "scripts": {
     "start": "debug=true electron-forge start",
     "package": "electron-forge package",

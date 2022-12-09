@@ -36,7 +36,7 @@ $ npm run package
 如果打包失败了，提示Node JS版本Node.js >= 14.17.5，使用NVM安装
 
 ```
-$ nvm install 14.17.5
+$ nvm use
 ```
 
 
