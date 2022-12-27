@@ -22,6 +22,8 @@ const filters = [
   { name: 'PDF', extensions: ['pdf'] },
 ];
 
+const DEFAULT_SUFFIX = '-watermark.pdf';
+
 async function choiceFile() {
   const { canceled, filePaths } = await dialog.showOpenDialog({ filters });
   if (canceled) return;
@@ -31,7 +33,7 @@ async function choiceFile() {
 
 async function saveFile(event, textOptions) {
   const { inputFilePath } = textOptions;
-  const defaultPath = `${path.basename(textOptions.inputFilePath, '.pdf')}-watermark.pdf`;
+  const defaultPath = `${path.basename(textOptions.inputFilePath, '.pdf')}${DEFAULT_SUFFIX}`;
   const { canceled, filePath } = await dialog.showSaveDialog({ filters, defaultPath });
   if (canceled) return;
   await addWatermark(inputFilePath, filePath, textOptions);
