@@ -42,11 +42,13 @@ const vueApp = createApp({
       this.loading = true;
       const filePath = await window.electronAPI.saveFile({ ...this.textOptions });
       this.loading = false;
-      this.showTip = true;
-      await window.electronAPI.openFolder(filePath);
-      setTimeout(() => {
-        this.showTip = false;
-      }, 3000);
+      if (filePath) {
+        this.showTip = true;
+        await window.electronAPI.openFolder(filePath);
+        setTimeout(() => {
+          this.showTip = false;
+        }, 3000);
+      }
     },
   },
 });
