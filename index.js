@@ -31,9 +31,10 @@ async function choiceFile() {
 
 async function saveFile(event, textOptions) {
   const { inputFilePath } = textOptions;
-  const { canceled, filePath } = await dialog.showSaveDialog({ filters });
+  const defaultPath = `${path.basename(textOptions.inputFilePath, '.pdf')}-watermark.pdf`;
+  const { canceled, filePath } = await dialog.showSaveDialog({ filters, defaultPath });
   if (canceled) return;
-  addWatermark(inputFilePath, filePath, textOptions);
+  await addWatermark(inputFilePath, filePath, textOptions);
   return filePath;
 }
 
