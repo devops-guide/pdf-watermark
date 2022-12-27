@@ -8,7 +8,7 @@ const { addWatermark } = require('./main');
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
-    height: 500,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, './web/preload.js'),
     },
