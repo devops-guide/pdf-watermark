@@ -7,8 +7,8 @@ const { PDFDocument, rgb, degrees } = require('pdf-lib');
 const fontBytes = fs.readFileSync(path.join(__dirname, './fonts/Microsoft Yahei.ttf'));
 
 const defaultTextOptions = {
-  marginBottom: 50,
   marginRight: 50,
+  marginBottom: 50,
   textSize: 30,
   opacity: 0.4,
   color: rgb(228 / 255.0, 228 / 255.0, 228 / 255.0),
@@ -35,6 +35,10 @@ function tiled(width, textWidth, height, textHeight, onePage, options, chineseFo
 async function addWatermark(inputFilePath, outputFilePath, textOptions) {
   const options = { ...defaultTextOptions, ...textOptions };
   options.textSize = Number(options.textSize);
+  options.marginRight = Number(options.marginRight);
+  options.marginBottom = Number(options.marginBottom);
+  options.opacity = Number(options.opacity);
+  options.rotate = Number(options.rotate);
 
   const uint8Array = fs.readFileSync(inputFilePath);
   const pdfDoc = await PDFDocument.load(uint8Array);
@@ -54,15 +58,14 @@ async function addWatermark(inputFilePath, outputFilePath, textOptions) {
     }
 
     if (textOptions.style === 'centered') {
-      // const a = Math.sqrt(2 * textWidth) / 2;
       onePage.drawText(options.text, {
         x: (width - textWidth) / 2,
         y: (height - textHeight) / 2,
         size: options.textSize,
         font: chineseFonts,
-        opacity: Number(options.opacity),
+        opacity: options.opacity,
         color: options.color,
-        rotate: degrees(Number(options.rotate)),
+        rotate: degrees(options.rotate),
       });
     }
   });
