@@ -1,5 +1,3 @@
-
-
 # pdf-watermark
 
 <img src="https://github.com/devops-guide/pdf-watermark/blob/master/icons/logo.png?raw=true" width="128"/>
@@ -17,7 +15,7 @@
 
 ![界面](https://tva1.sinaimg.cn/large/008vxvgGly1h7r7f6zvawj318g0rswgh.jpg)
 
-
+在 [Releases](https://github.com/devops-guide/pdf-watermark/releases) 中下载最新版本。
 
 # Mac 无法正常打开
 
@@ -25,11 +23,9 @@
 
 ![无法打开](https://tva1.sinaimg.cn/large/008vxvgGly1h9ipnjmcg6j30eg0dsjru.jpg)
 
-
 进入系统偏好设置，点击【安全性与隐私】，如图
 
 ![安全性与隐私](https://tva1.sinaimg.cn/large/008vxvgGly1h9ipqjg25jj30za0u0whr.jpg)
-
 
 ![仍要打开](https://tva1.sinaimg.cn/large/008vxvgGly1h9ippjjerij30y50u0wgn.jpg)
 
