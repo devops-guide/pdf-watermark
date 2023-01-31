@@ -1,7 +1,7 @@
 {
   "name": "pdf-watermark",
   "version": "1.0.6",
-  "description": "",
+  "description": "pdf watermark",
   "main": "index.js",
   "engines": {
     "node": ">=14.17.5"
@@ -15,7 +15,7 @@
     "test": "node ./test/testMain.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "xbl",
   "license": "ISC",
   "dependencies": {
     "@pdf-lib/fontkit": "^1.1.1",
@@ -28,6 +28,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.68",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.68",
     "@electron-forge/maker-zip": "^6.0.0-beta.68",
+    "@electron-forge/maker-dmg": "^6.0.4",
     "@electron-forge/publisher-github": "^6.0.0-beta.74",
     "electron": "^21.2.0",
     "electron-builder": "^23.6.0",

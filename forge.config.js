@@ -16,6 +16,14 @@ module.exports = {
       ],
     },
     {
+      name: '@electron-forge/maker-dmg',
+      platforms: ['darwin'],
+      config: {
+        background: './icons/logo.png',
+        format: 'ULFO',
+      },
+    },
+    {
       name: '@electron-forge/maker-deb',
       config: {},
     },

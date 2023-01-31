@@ -25,12 +25,12 @@ const vueApp = createApp({
         this.textOptions.textSize = 150;
         this.textOptions.marginRight = 50;
         this.textOptions.marginBottom = 50;
-      } else {
-        this.textOptions.rotate = -45;
-        this.textOptions.textSize = 30;
-        this.textOptions.marginRight = 150;
-        this.textOptions.marginBottom = 150;
+        return;
       }
+      this.textOptions.rotate = -45;
+      this.textOptions.textSize = 30;
+      this.textOptions.marginRight = 150;
+      this.textOptions.marginBottom = 150;
     },
   },
   methods: {
@@ -42,13 +42,14 @@ const vueApp = createApp({
       this.loading = true;
       const filePath = await window.electronAPI.saveFile({ ...this.textOptions });
       this.loading = false;
-      if (filePath) {
-        this.showTip = true;
-        await window.electronAPI.openFolder(filePath);
-        setTimeout(() => {
-          this.showTip = false;
-        }, 3000);
+      if (!filePath) {
+        return;
       }
+      this.showTip = true;
+      await window.electronAPI.openFolder(filePath);
+      setTimeout(() => {
+        this.showTip = false;
+      }, 3000);
     },
   },
 });
