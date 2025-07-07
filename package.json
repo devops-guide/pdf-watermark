@@ -42,6 +42,7 @@
     "eslint-plugin-import": "^2.26.0"
   },
   "bin": {
+    "@xbl/pdf-watermark": "mcp-server.js",
     "pdf-watermark": "mcp-server.js"
   }
 }
