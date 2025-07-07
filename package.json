@@ -14,7 +14,10 @@
     "lint": "eslint --fix --ext .js ./",
     "test": "node ./test/testMain.js"
   },
-  "keywords": ["pdf", "watermark"],
+  "keywords": [
+    "pdf",
+    "watermark"
+  ],
   "author": "xbl",
   "license": "ISC",
   "dependencies": {
@@ -39,6 +42,6 @@
     "eslint-plugin-import": "^2.26.0"
   },
   "bin": {
-    "pdf-watermark": "./mcp-server.js"
+    "pdf-watermark": "mcp-server.js"
   }
 }
