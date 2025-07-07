@@ -1,6 +1,6 @@
 {
   "name": "pdf-watermark",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "pdf watermark",
   "main": "index.js",
   "engines": {
@@ -14,7 +14,7 @@
     "lint": "eslint --fix --ext .js ./",
     "test": "node ./test/testMain.js"
   },
-  "keywords": [],
+  "keywords": ["pdf", "watermark"],
   "author": "xbl",
   "license": "ISC",
   "dependencies": {
