@@ -51,3 +51,19 @@ $ npm run package
 ```
 $ nvm use
 ```
+
+### MCP 功能
+
+```json
+{
+  "mcpServers": {
+    "pdf-watermark": {
+      "command": "npx",
+      "args": ["@xbl/pdf-watermark"]
+    }
+  }
+}
+```
+
+提示词：
+> <文件路径>/input.pdf 添加水印：仅供我自己使用
