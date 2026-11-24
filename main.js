@@ -1,79 +1,13 @@
-const fs = require('fs');
-const path = require('path');
-const { writeFile } = require('node:fs/promises');
-const fontkit = require('@pdf-lib/fontkit');
-const { PDFDocument, rgb, degrees } = require('pdf-lib');
+const path = require('node:path');
+const { readFile, writeFile } = require('node:fs/promises');
+const { watermarkPdf } = require('./watermark');
 
-const fontBytes = fs.readFileSync(path.join(__dirname, './fonts/Microsoft Yahei.ttf'));
-
-const defaultTextOptions = {
-  marginRight: 50,
-  marginBottom: 50,
-  textSize: 30,
-  opacity: 0.4,
-  color: rgb(228 / 255.0, 228 / 255.0, 228 / 255.0),
-  rotate: -45,
-  text: '仅限XXX内部使用',
-};
-
-function tiled(width, textWidth, height, textHeight, onePage, options, chineseFonts) {
-  for (let j = 0; j < (width / textWidth); j++) {
-    for (let i = 0; i < (height / textHeight); i++) {
-      onePage.drawText(options.text, {
-        x: j * textWidth,
-        y: height - i * textHeight,
-        size: options.textSize,
-        font: chineseFonts,
-        opacity: Number(options.opacity),
-        color: options.color,
-        rotate: degrees(Number(options.rotate)),
-      });
-    }
-  }
-}
+const fontPath = path.join(__dirname, 'fonts', 'Microsoft Yahei.ttf');
 
 async function addWatermark(inputFilePath, outputFilePath, textOptions) {
-  const options = { ...defaultTextOptions, ...textOptions };
-  options.textSize = Number(options.textSize);
-  options.marginRight = Number(options.marginRight);
-  options.marginBottom = Number(options.marginBottom);
-  options.opacity = Number(options.opacity);
-  options.rotate = Number(options.rotate);
-
-  const uint8Array = fs.readFileSync(inputFilePath);
-  const pdfDoc = await PDFDocument.load(uint8Array);
-  pdfDoc.registerFontkit(fontkit);
-
-  const chineseFonts = await pdfDoc.embedFont(fontBytes);
-  const pages = pdfDoc.getPages();
-
-  const textWidth = chineseFonts.widthOfTextAtSize(options.text, options.textSize) + options.marginRight;
-  const textHeight = chineseFonts.heightAtSize(options.textSize) + options.marginBottom;
-
-  pages.forEach((onePage) => {
-    const { width, height } = onePage.getSize();
-
-    if (textOptions.style === 'tiled') {
-      tiled(width, textWidth, height, textHeight, onePage, options, chineseFonts);
-    }
-
-    if (textOptions.style === 'centered') {
-      onePage.drawText(options.text, {
-        x: (width - textWidth) / 2,
-        y: (height - textHeight) / 2,
-        size: options.textSize,
-        font: chineseFonts,
-        opacity: options.opacity,
-        color: options.color,
-        rotate: degrees(options.rotate),
-      });
-    }
-  });
-
-  const pdfBytes = await pdfDoc.save();
-  await writeFile(outputFilePath, pdfBytes);
+  const [pdf, font] = await Promise.all([readFile(inputFilePath), readFile(fontPath)]);
+  const result = await watermarkPdf(pdf, font, textOptions);
+  await writeFile(outputFilePath, result);
 }
 
-module.exports = {
-  addWatermark,
-};
+module.exports = { addWatermark };

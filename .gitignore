@@ -3,3 +3,9 @@ node_modules
 .DS_Store
 out
 .idea
+.mooncakes/
+_moon/
+_build/
+target/
+dist/
+/app/pkg.generated.mbti

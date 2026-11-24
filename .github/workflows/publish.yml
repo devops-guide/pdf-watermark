@@ -5,33 +5,32 @@ on:
     tags:
       - v*
 
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
-    runs-on: macOS-latest
+    runs-on: macos-15
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3.0.0
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3.0.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "14.17.5"
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build App
-        run: npm run package
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          printf '%s\n' "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - run: npm ci
+      - run: npm test
+      - run: npm run setup:proton
+      - run: npm run package -- --format zip
+      - name: Upload release
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
-      - name: Archive Release
-        run: npm run make
-
-      - name: Release
-        uses: softprops/action-gh-release@v0.1.14
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: out/make/zip/darwin/x64/pdf-watermark-*.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/*.app.zip
+          else
+            gh release create "$GITHUB_REF_NAME" dist/*.app.zip --verify-tag --generate-notes
+          fi

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'; base-uri 'none'">
+  <title>PDF 水印</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main>
+    <header class="heading">
+      <div class="document-mark" aria-hidden="true">PDF</div>
+      <h1>PDF 水印</h1>
+    </header>
+    <div class="workspace">
+      <form id="watermark-form">
+        <section class="fields" aria-label="文件与水印">
+          <div class="field">
+            <label for="file-name">源 PDF</label>
+            <div class="file-row">
+              <input id="file-name" readonly placeholder="尚未选择文件">
+              <button type="button" id="choose" class="secondary">选择文件</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="watermark-text">水印文字</label>
+            <input type="text" name="text" id="watermark-text" placeholder="例如 仅供内部使用" required>
+          </div>
+          <fieldset>
+            <legend>水印样式</legend>
+            <div class="mode-switch">
+              <label><input type="radio" name="style" value="tiled" checked><span>平铺</span></label>
+              <label><input type="radio" name="style" value="centered"><span>居中</span></label>
+            </div>
+          </fieldset>
+        </section>
+        <div class="settings">
+          <label>字体大小 <span><input type="number" name="textSize" value="30" min="1" max="1000" required> pt</span></label>
+          <label>不透明度 <span><input type="number" name="opacity" value="40" min="0" max="100" required> %</span></label>
+          <label class="tiled-only">旋转角度 <span><input type="number" name="rotate" value="-45" min="-180" max="180" required> °</span></label>
+          <label class="tiled-only">右间距 <span><input type="number" name="marginRight" value="150" min="0" max="1000" required> pt</span></label>
+          <label class="tiled-only">下间距 <span><input type="number" name="marginBottom" value="150" min="0" max="1000" required> pt</span></label>
+        </div>
+        <div class="actions">
+          <button id="save" type="submit" disabled>保存 PDF</button>
+          <button type="button" id="reveal" class="secondary" hidden>在文件管理器中显示</button>
+        </div>
+        <p id="status" role="status" class="status"></p>
+      </form>
+      <aside class="preview" aria-label="水印示意">
+        <div class="sheet" aria-hidden="true">
+          <div class="paper-lines"></div>
+          <div id="stamps"></div>
+        </div>
+        <p>水印位置示意</p>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

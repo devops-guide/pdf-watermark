@@ -1,0 +1,19 @@
+import {
+  "moonbit-community/proton",
+  "moonbit-community/proton_contract" @contract,
+  "moonbit-community/proton_shell" @shell,
+  "moonbitlang/core/async",
+  "moonbitlang/core/async/fs",
+  "moonbitlang/core/cmp",
+  "moonbitlang/core/encoding/base64",
+  "moonbitlang/core/path",
+  "moonbitlang/core/random",
+}
+
+supported_targets = "native"
+
+pkgtype(kind: "executable")
+
+options(
+  "allow-experimental-packages": true,
+)
