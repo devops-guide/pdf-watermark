@@ -12,7 +12,8 @@
   <a href="https://github.com/devops-guide/pdf-watermark/releases"><img src="https://img.shields.io/github/v/release/devops-guide/pdf-watermark?color=4177F6&label=Release" alt="Latest Release"></a>
   <img src="https://img.shields.io/badge/Platform-macOS%20(Apple%20Silicon)-brightgreen" alt="Platform">
   <img src="https://img.shields.io/badge/Language-Pure%20MoonBit-blue" alt="Pure MoonBit">
-  <img src="https://img.shields.io/badge/Framework-Proton%200.9.1-orange" alt="Proton">
+  <img src="https://img.shields.io/badge/GUI-Native%20WebKit%20(WKWebView)-orange" alt="WebKit">
+  <img src="https://img.shields.io/badge/Bundle%20Size-%3C%203%20MB-success" alt="Bundle Size">
 </p>
 
 ---
@@ -26,28 +27,28 @@
   - **图片 / 印章水印**：支持 PNG 透明印章或签名图片，支持居中印章或全页平铺，缩放比例与透明度随心调节。
 - 📄 **灵活细粒度的页码控制**  
   - 支持全部页面加水印；
-  - 预设一键“**跳过封面**”（从第 2 页开始加水印）；
+  - 预设一键“**跳过首页**”（从第 2 页开始加水印）；
   - 支持自定义页码范围表达式（如 `1-5, 8`）。
 - 🛡️ **安全原子保存与源文件保护**  
   保存时默认在源文件同级目录生成 `原文件名-watermark.pdf`，采用先写入临时文件、验证通过后再原子替换的机制，绝不误改或损坏源文件。
-- ⚡ **原生极速体验**  
-  核心引擎由纯 MoonBit 原生编译为本地机器码，告别 Electron 庞大臃肿的运行时开销，启停迅速、内存占用极低。
+- ⚡ **超轻量原生极速体验（压缩包仅 2.8 MB）**  
+  核心引擎与 GUI 桥接完全基于纯 MoonBit 与 macOS 系统级 WebKit (WKWebView) 构建，彻底摆脱 Electron 与 Chromium 庞大的运行时依赖（安装包由过去的 175 MB 剧减至 2.8 MB），秒开秒用，内存占用极低。
 
 ---
 
 ## 产品界面与效果
 
-### 桌面端界面
+### 桌面端主界面
 
-![产品主界面](https://tva1.sinaimg.cn/large/008vxvgGly1h7r7f6zvawj318g0rswgh.jpg)
+![桌面端主界面](docs/screenshots/app-main.png)
 
-### 平铺水印效果
+### 对角平铺水印与细粒度页码控制
 
-![平铺效果](https://tva1.sinaimg.cn/large/008vxvgGly1h7r7dt67p8j31hf0u00x9.jpg)
+![对角平铺效果](docs/screenshots/app-diagonal.png)
 
-### 居中水印效果
+### 图片与印章水印模式
 
-![居中效果](https://tva1.sinaimg.cn/large/008vxvgGly1h7r7einzkvj31he0u076e.jpg)
+![印章水印效果](docs/screenshots/app-image.png)
 
 ---
 
@@ -57,7 +58,7 @@
 
 1. 下载 `PDF.Watermark.app.zip` 并解压。
 2. 将 `PDF Watermark.app` 拖入 `Applications`（应用程序）文件夹。
-3. 双击打开，将需要加水印的 PDF 文件直接拖拽到窗口中，设置水印参数后点击“生成并保存”即可。
+3. 双击打开，将需要加水印的 PDF 文件直接拖拽到窗口中，设置水印参数后点击“保存 PDF”即可。
 
 ---
 
@@ -87,7 +88,7 @@
 
 ## 开发者与源码构建
 
-本项目为 100% 纯 MoonBit + Proton 桌面工程，**无需 Node.js 与 npm 环境**。
+本项目为 100% 纯 MoonBit + 原生 WebKit 架构，**完全不需要 Node.js、npm 或 Electron/Chromium 环境**。
 
 ### 环境准备
 
@@ -98,20 +99,13 @@ curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
 export PATH="$HOME/.moon/bin:$PATH"
 ```
 
-安装并初始化 Proton CLI：
-
-```sh
-./scripts/install-proton.sh
-```
-
 ### 常用命令
 
 | 命令 | 用途 |
 | --- | --- |
-| `proton_cli dev` | 启动桌面应用开发预览 |
-| `moon test --target native` | 运行原生测试套件 |
-| `moon fmt` / `moon check --target native` | 代码格式化与静态检查 |
-| `proton_cli package --release` | 构建并打包 macOS 原生应用（输出至 `dist/`） |
+| `moon test --target native` | 运行原生测试套件（含排版、页码与文件会话测试） |
+| `moon check --target native` | 静态类型检查 |
+| `./scripts/package-macos.sh` | 编译并打包超轻量 macOS 原生应用（输出至 `dist/`，仅 2.8 MB） |
 
 ### 命令行 CLI 使用
 

@@ -32,7 +32,14 @@ const imageThumbnail = document.querySelector('#image-thumbnail');
 const imagePdfBadge = document.querySelector('#image-pdf-badge');
 const reselectImage = document.querySelector('#reselect-image');
 
-const bridge = window.__MoonBit__?.app;
+const bridge = window.__MoonBit__?.app || new Proxy({}, {
+  get: (_, prop) => (...args) => {
+    if (window.__MoonBit__?.app?.[prop]) {
+      return window.__MoonBit__.app[prop](...args);
+    }
+    return Promise.reject(new Error(`Bridge not ready: ${prop}`));
+  }
+});
 
 let busy = false;
 let sourcePdf = null;
@@ -543,7 +550,7 @@ window.addEventListener('keydown', event => {
   }
 });
 
-if (!bridge) announce('请在桌面应用中运行。', true);
+if (!window.__MoonBit__?.app && !window.__MoonBitBridge) announce('请在桌面应用中运行。', true);
 
 // 挂载到 window 方便调试与验证
 window.__app = {

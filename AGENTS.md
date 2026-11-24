@@ -3,25 +3,24 @@
 ## 项目结构
 
 - `app/main.mbt` 是应用入口（支持桌面 GUI 模式与直接 CLI 命令行模式）。
+- `app/wk_bridge.m` 与 `app/wk_bridge.mbt` 是 macOS 原生 AppKit 与 WebKit (WKWebView) 轻量 FFI 桥接。
 - `app/files.mbt` 管理原生文件对话框、文件保护与会话状态。
 - `app/watermark.mbt` 原生 MoonBit 水印引擎，基于 `moonbitlang/pdflite` 直接操作 PDF 文件流。
 - `app/layout.mbt` 负责强类型水印几何排版计算与页码范围解析。
-- `frontend/` 零构建的轻量静态前端，直接由 Proton 加载。
-- `moon.mod` 声明 MoonBit 依赖，`proton.project.json` 配置桌面应用及打包。
+- `frontend/` 零构建的轻量静态前端，由系统 WKWebView 直接加载。
+- `moon.mod` 声明 MoonBit 依赖，`scripts/package-macos.sh` 一键打包超轻量发布包（< 3 MB）。
 - `.github/workflows/publish.yml` 由 `v*` 标签触发，构建 Apple Silicon macOS 发布包（纯 MoonBit 工具链）。
 
 ## 开发命令
 
-本项目为 100% 纯 MoonBit 项目，**无需 Node.js 与 npm 环境**。将 `moon` 和 `proton_cli` 加入 `PATH`。
+本项目为 100% 纯 MoonBit + macOS 原生 WebKit 项目，**完全无需 Node.js、npm 或 Proton/Electron 环境**。将 `moon` 加入 `PATH`。
 
 | 命令 | 用途 |
 | --- | --- |
-| `./scripts/install-proton.sh` | 安装与项目匹配的 Proton CLI |
-| `proton_cli dev` | 启动桌面端开发预览 |
+| `moon test --target native` | 运行原生测试套件（含排版、页码与文件会话测试） |
 | `moon fmt` / `moon check --target native` | 格式化和检查 MoonBit 代码 |
-| `moon test --target native` | 运行原生测试套件 |
-| `proton_cli build -- --release` | 编译本地原生可执行程序 |
-| `proton_cli package --release` | 构建和打包桌面应用，安装包输出到 `dist/` |
+| `moon build --target native --release` | 编译本地原生可执行程序 |
+| `./scripts/package-macos.sh` | 一键打包 macOS 原生应用（输出至 `dist/`，仅 2.8 MB） |
 
 ## 修改与验证
 

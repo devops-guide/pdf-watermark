@@ -1,12 +1,11 @@
 import {
-  "moonbit-community/proton",
-  "moonbit-community/proton_contract" @contract,
-  "moonbit-community/proton_shell" @shell,
   "moonbitlang/core/async",
   "moonbitlang/core/async/fs",
   "moonbitlang/core/cmp",
   "moonbitlang/core/encoding/base64",
+  "moonbitlang/core/encoding/utf8",
   "moonbitlang/core/env",
+  "moonbitlang/core/json",
   "moonbitlang/core/math",
   "moonbitlang/core/path",
   "moonbitlang/core/random",
@@ -24,4 +23,11 @@ pkgtype(kind: "executable")
 
 options(
   "allow-experimental-packages": true,
+  "native-stub": [ "wk_bridge.m" ],
+  link: {
+    "native": {
+      "stub-cc-flags": "-ObjC -fblocks",
+      "cc-link-flags": "-framework Cocoa -framework WebKit -framework UniformTypeIdentifiers",
+    },
+  },
 )
