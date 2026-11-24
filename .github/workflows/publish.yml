@@ -17,8 +17,10 @@ jobs:
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           printf '%s\n' "$HOME/.moon/bin" >> "$GITHUB_PATH"
-      - name: Install Proton CLI
-        run: ./scripts/install-proton.sh
+      - name: Install Proton CLI and Setup Runtime
+        run: |
+          ./scripts/install-proton.sh
+          proton_cli setup
       - name: Check and Test
         run: |
           moon check --target native
