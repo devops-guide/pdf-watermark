@@ -156,3 +156,58 @@ async test "drop_pdf_data rejects non-pdf extensions" {
   }
   assert_true(raised)
 }
+
+///|
+async test "handle_call routes calculateLayout and parsePageRange" {
+  let session = @app.FileSession::new()
+  let layout_param : Json = {
+    "style": "centered",
+    "page_width": 595.0,
+    "page_height": 842.0,
+    "crop_x": 0.0,
+    "crop_y": 0.0,
+    "stamp_width": 200.0,
+    "stamp_height": 50.0,
+    "rotate": 0.0,
+    "margin_right": 100.0,
+    "margin_bottom": 100.0,
+  }
+  let layout_res = session.handle_call("calculateLayout", layout_param)
+  match layout_res {
+    Object(map) => assert_true(map.contains("stamps"))
+    _ => assert_true(false)
+  }
+
+  let range_param : Json = { "range_spec": "1-3", "total_pages": 5 }
+  let range_res = session.handle_call("parsePageRange", range_param)
+  match range_res {
+    Object(map) => assert_true(map.contains("included"))
+    _ => assert_true(false)
+  }
+}
+
+///|
+async test "handle_call openPdfPath and dropPdfData" {
+  let session = @app.FileSession::new()
+  let open_param : Json = { "path": "test/input.pdf" }
+  let open_res = session.handle_call("openPdfPath", open_param)
+  match open_res {
+    Object(map) => assert_true(map.contains("path"))
+    _ => assert_true(false)
+  }
+
+  let sample_bytes : Bytes = [1, 2, 3]
+  let b64 = @base64.encode(sample_bytes[:])
+  let drop_param : Json = { "name": "sample.pdf", "data": b64 }
+  let drop_res = session.handle_call("dropPdfData", drop_param)
+  match drop_res {
+    Object(map) => {
+      assert_true(map.contains("path"))
+      match map.get("path") {
+        Some(String(p)) => @fs.remove(p, allow_missing=true)
+        _ => ()
+      }
+    }
+    _ => assert_true(false)
+  }
+}
