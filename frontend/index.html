@@ -3,60 +3,160 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'; base-uri 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; object-src 'none'; base-uri 'none'">
   <title>PDF 水印</title>
+  <link rel="icon" type="image/png" href="logo.png">
   <link rel="stylesheet" href="style.css">
-  <script defer src="app.js"></script>
 </head>
 <body>
   <main>
     <header class="heading">
-      <div class="document-mark" aria-hidden="true">PDF</div>
-      <h1>PDF 水印</h1>
+      <img class="app-logo" src="logo.png" alt="PDF Watermark" width="32" height="32">
+      <div class="heading-title">
+        <h1>PDF 水印</h1>
+      </div>
     </header>
+
     <div class="workspace">
-      <form id="watermark-form">
+      <form id="watermark-form" autocomplete="off">
         <section class="fields" aria-label="文件与水印">
+          <!-- 源 PDF 文件选择与拖拽栏 -->
           <div class="field">
-            <label for="file-name">源 PDF</label>
-            <div class="file-row">
-              <input id="file-name" readonly placeholder="尚未选择文件">
-              <button type="button" id="choose" class="secondary">选择文件</button>
+            <label class="field-label">源 PDF 文件</label>
+            <div id="pdf-dropzone" class="dropzone" tabindex="0" role="button" aria-label="选择或拖拽 PDF 文件">
+              <div class="dropzone-content" id="pdf-prompt">
+                <svg class="icon-file" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="12" y1="18" x2="12" y2="12"></line>
+                  <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                <span class="dropzone-text" id="pdf-prompt-text">点击选择 或 拖拽 PDF 文件至此</span>
+                <span class="dropzone-action">浏览…</span>
+              </div>
+              <div class="dropzone-content dropzone-selected" id="pdf-selected" hidden>
+                <span class="file-badge">PDF</span>
+                <span class="file-name" id="selected-pdf-name" title="">未选择文件</span>
+                <button type="button" id="reselect-pdf" class="btn-subtle">更改</button>
+              </div>
             </div>
           </div>
+
+          <!-- 水印类型选择：文字水印 vs 图片/印章水印 -->
           <div class="field">
-            <label for="watermark-text">水印文字</label>
-            <input type="text" name="text" id="watermark-text" placeholder="例如 仅供内部使用" required>
-          </div>
-          <fieldset>
-            <legend>水印样式</legend>
-            <div class="mode-switch">
-              <label><input type="radio" name="style" value="tiled" checked><span>平铺</span></label>
-              <label><input type="radio" name="style" value="centered"><span>居中</span></label>
+            <label class="field-label">水印类型</label>
+            <div class="mode-switch" id="watermark-type-switch">
+              <label><input type="radio" name="watermarkType" value="text" checked><span>文字水印</span></label>
+              <label><input type="radio" name="watermarkType" value="image"><span>图片 / 印章水印</span></label>
             </div>
-          </fieldset>
+          </div>
+
+          <!-- 文字水印区域 -->
+          <div id="text-section" class="section-group">
+            <div class="field">
+              <label class="field-label" for="watermark-text">水印文字</label>
+              <textarea name="text" id="watermark-text" rows="2" placeholder="输入水印文字，支持多行换行">CONFIDENTIAL</textarea>
+            </div>
+            <div class="field" style="margin-top: 6px;">
+              <label class="field-label">排版样式</label>
+              <div class="mode-switch">
+                <label><input type="radio" name="style" value="centered" checked><span>居中水印</span></label>
+                <label><input type="radio" name="style" value="tiled"><span>对角平铺</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 图片 / 印章水印区域 -->
+          <div id="image-section" class="section-group" hidden>
+            <div class="field">
+              <label class="field-label">水印图片 / 印章</label>
+              <div id="image-dropzone" class="dropzone" tabindex="0" role="button" aria-label="选择或拖拽图片印章文件">
+                <div class="dropzone-content" id="image-prompt">
+                  <svg class="icon-file" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <span class="dropzone-text" id="image-prompt-text">点击选择 或 拖拽图片至此 (PNG / JPG / PDF)</span>
+                  <span class="dropzone-action">选择图片…</span>
+                </div>
+                <div class="dropzone-content dropzone-selected" id="image-selected" hidden>
+                  <img id="image-thumbnail" class="image-thumb" alt="印章" src="" hidden>
+                  <span class="file-badge" id="image-pdf-badge" hidden>PDF</span>
+                  <span class="file-name" id="selected-image-name" title="">未选择图片</span>
+                  <button type="button" id="reselect-image" class="btn-subtle">更改</button>
+                </div>
+              </div>
+            </div>
+            <div class="field" style="margin-top: 6px;">
+              <label class="field-label" for="image-position">放置位置</label>
+              <select name="imagePosition" id="image-position">
+                <option value="bottom-right" selected>右下角（公章 / 签名常用）</option>
+                <option value="centered">页面居中</option>
+                <option value="bottom-left">左下角</option>
+                <option value="top-right">右上角</option>
+                <option value="top-left">左上角</option>
+                <option value="diagonal">对角居中</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 应用页面：纯按钮单选组，一键切换 -->
+          <div class="field" style="margin-top: 6px;">
+            <label class="field-label">应用页面</label>
+            <div class="mode-switch" id="page-range-switch">
+              <label><input type="radio" name="pageRangeMode" value="all" checked><span>全部页面</span></label>
+              <label><input type="radio" name="pageRangeMode" value="skip-first"><span>跳过首页</span></label>
+              <label><input type="radio" name="pageRangeMode" value="custom"><span>指定页码</span></label>
+            </div>
+          </div>
+          <div class="field" id="custom-range-row" hidden style="margin-top: 4px;">
+            <label class="field-label" for="custom-range-input">指定页码范围</label>
+            <input type="text" id="custom-range-input" name="customRange" placeholder="例如 1-3, 5, 8-10" style="width: 100%; max-width: 220px;">
+          </div>
         </section>
+
+        <!-- 设置选项 -->
         <div class="settings">
-          <label>字体大小 <span><input type="number" name="textSize" value="30" min="1" max="1000" required> pt</span></label>
+          <!-- 文字专有设置 -->
+          <label class="text-setting">字体大小 <span><input type="number" name="textSize" value="48" min="1" max="1000" required> pt</span></label>
+          <label class="text-setting">文字颜色 <span><input type="color" name="color" value="#cc3333"></span></label>
+          <label class="text-setting tiled-only" hidden>旋转角度 <span><input type="number" name="rotate" value="-45" min="-180" max="180"> °</span></label>
+          <label class="text-setting tiled-only" hidden>右间距 <span><input type="number" name="marginRight" value="150" min="0" max="1000"> pt</span></label>
+          <label class="text-setting tiled-only" hidden>下间距 <span><input type="number" name="marginBottom" value="150" min="0" max="1000"> pt</span></label>
+
+          <!-- 图片专有设置 -->
+          <label class="image-setting" hidden>印章缩放
+            <span class="range-row">
+              <input type="range" name="imageScaleRange" min="5" max="100" value="35" style="width: 70px; cursor: pointer;">
+              <input type="number" name="imageScale" value="35" min="5" max="100" style="width: 48px;"> %
+            </span>
+          </label>
+          <label class="image-setting" hidden>适应页面 <span><input type="checkbox" name="scaleToFit"> 铺满整页</span></label>
+
+          <!-- 共享设置 -->
           <label>不透明度 <span><input type="number" name="opacity" value="40" min="0" max="100" required> %</span></label>
-          <label class="tiled-only">旋转角度 <span><input type="number" name="rotate" value="-45" min="-180" max="180" required> °</span></label>
-          <label class="tiled-only">右间距 <span><input type="number" name="marginRight" value="150" min="0" max="1000" required> pt</span></label>
-          <label class="tiled-only">下间距 <span><input type="number" name="marginBottom" value="150" min="0" max="1000" required> pt</span></label>
         </div>
+
         <div class="actions">
           <button id="save" type="submit" disabled>保存 PDF</button>
           <button type="button" id="reveal" class="secondary" hidden>在文件管理器中显示</button>
         </div>
+        <p class="tips">快捷键：⌘O 打开文件，⌘S 保存 PDF</p>
         <p id="status" role="status" class="status"></p>
       </form>
-      <aside class="preview" aria-label="水印示意">
-        <div class="sheet" aria-hidden="true">
-          <div class="paper-lines"></div>
-          <div id="stamps"></div>
+
+      <aside class="preview" aria-label="水印效果示意">
+        <div class="sheet-wrapper">
+          <div class="sheet" aria-hidden="true">
+            <div class="paper-lines"></div>
+            <div id="stamps"></div>
+          </div>
         </div>
-        <p>水印位置示意</p>
+        <p id="preview-desc">水印效果示意</p>
       </aside>
     </div>
   </main>
+  <script src="app.js"></script>
 </body>
 </html>

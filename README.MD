@@ -1,44 +1,51 @@
-# PDF 水印
+# PDF 水印 (Pure MoonBit)
 
-在桌面上给 PDF 的每一页添加中文或英文文字水印。选择平铺或居中，调整字号和不透明度；平铺还可调整角度和间距。文字过大时会按当前页面缩小。处理在本机完成。保存时默认在源文件旁生成 `原文件名-watermark.pdf`，原文件不会被覆盖。
+原生 MoonBit 实现的 PDF 水印桌面应用与命令行工具。零 Node.js / npm 依赖。
 
-桌面端使用 Proton 0.9.1。MoonBit 负责窗口、原生文件对话框和文件操作，Web Worker 使用 pdf-lib 处理 PDF。桌面端和 MCP 共用水印逻辑，打包后的桌面应用自带 Chromium 运行时。
+在桌面或命令行给 PDF 添加文字水印。选择平铺或居中，调整字号和不透明度，支持设置指定页码范围（如跳过封面）。处理完全在本机完成。保存时默认在源文件旁生成 `原文件名-watermark.pdf`，原文件不会被覆盖。
+
+- **核心引擎**：基于 `moonbitlang/pdflite` 原生实现，直接操作 PDF 内容流。
+- **桌面框架**：基于 Proton 0.9.1（MoonBit Native 后端 + 零构建纯静态 Webview 前端）。
+- **零环境依赖**：完全脱离 Node.js / npm，使用 MoonBit 原生构建与测试。
 
 ## 本地运行
 
-需要 Node.js 22、MoonBit 和平台的 C/C++ 工具链。macOS 使用 Apple Silicon 和 Xcode 命令行工具，其余平台参见 [Proton 环境要求](https://moonbit-community.github.io/proton/introduction/installation.html)。
+只需要 [MoonBit](https://www.moonbitlang.com/) 和平台的 C/C++ 工具链（macOS 使用 Apple Silicon 和 Xcode 命令行工具）。
 
 ```sh
-npm ci
-npm run setup:proton
-npm start
+# 安装匹配版本的 Proton CLI
+./scripts/install-proton.sh
+
+# 启动桌面端开发预览
+proton_cli dev
 ```
 
-确保 `moon` 和 `proton_cli` 都在 `PATH` 中。首次运行会下载 Proton 的 Chromium 运行时。MoonBit 0.10.22 对两处文件读取参数要求显式的可变视图，安装脚本遇到该错误时会从固定的 Proton 源码提交构建兼容版 CLI。
+确保 `moon` 和 `proton_cli` 都在 `PATH` 中。首次运行会下载 Proton 的 Chromium 运行时。
 
 ## 测试与打包
 
 ```sh
-npm test
+# 运行原生单元测试
+moon test --target native
+
+# 代码格式化与静态检查
+moon fmt
 moon check --target native
-npm run package
+
+# 打包当前平台的原生发布包
+proton_cli package --release
 ```
 
-打包生成当前平台的应用，输出在 `dist/`。在 Apple Silicon Mac 上可以用 `npm run package -- --format app` 仅生成 `.app`，或指定 `--format zip` 生成 ZIP。macOS 本地构建默认未签名和公证。
+打包生成的应用输出在 `dist/`。在 Apple Silicon Mac 上可以用 `proton_cli package --release --format app` 仅生成 `.app`，或指定 `--format zip` 生成 ZIP。
 
-## MCP
+## 命令行与自动化使用
 
-已发布 npm 包可继续使用原来的配置。
+构建后的二进制可以直接作为原生 CLI 工具调用：
 
-```json
-{
-  "mcpServers": {
-    "pdf-watermark": {
-      "command": "npx",
-      "args": ["-y", "@xbl/pdf-watermark"]
-    }
-  }
-}
+```sh
+# 命令行快速加水印
+_build/native/release/build/app/app.exe 计划书.pdf "CONFIDENTIAL"
+
+# 查看使用帮助
+_build/native/release/build/app/app.exe --help
 ```
-
-要从当前分支运行 MCP，执行 `npm ci` 后，使用 `node` 作为命令，传入 `mcp-server.js` 的绝对路径。工具名为 `pdf`，接受 `filepath` 和 `text`，生成居中水印并返回输出路径。

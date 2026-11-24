@@ -2,12 +2,12 @@
   "identifier": "com.devops-guide.pdf-watermark",
   "backend": { "path": ".", "package": "app" },
   "frontend": {
-    "before_build": "npm run build:frontend",
-    "dist": "frontend/dist"
+    "dist": "frontend"
   },
   "package": {
     "product_name": "PDF Watermark",
     "version": "1.1.0",
+    "icons": ["icons/logo.icns", "icons/logo.png"],
     "output": "dist"
   },
   "platforms": {

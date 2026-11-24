@@ -6,8 +6,16 @@ import {
   "moonbitlang/core/async/fs",
   "moonbitlang/core/cmp",
   "moonbitlang/core/encoding/base64",
+  "moonbitlang/core/env",
+  "moonbitlang/core/math",
   "moonbitlang/core/path",
   "moonbitlang/core/random",
+  "moonbitlang/pdflite",
+  "moonbitlang/pdflite/async_io" @pdf_io,
+  "moonbitlang/pdflite/bookmark",
+  "moonbitlang/pdflite/content/colour",
+  "moonbitlang/pdflite/date" @pdf_date,
+  "moonbitlang/pdflite/geometry",
 }
 
 supported_targets = "native"
